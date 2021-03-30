@@ -8661,7 +8661,7 @@ void shaman_t::init_action_list_elemental()
     def->add_action(
         "primordial_wave,target_if=min:dot.flame_shock.remains,cycle_targets=1,if=!buff.primordial_wave.up" );
     def->add_action( "vesper_totem,if=covenant.kyrian" );
-    def->add_action( "fae_transfusion,if=covenant.night_fae" );
+    def->add_action( "fae_transfusion,if=covenant.night_fae&buff.master_of_the_elements.up" );
 
     // Pick APL to run
     def->add_action(
@@ -8775,12 +8775,11 @@ void shaman_t::init_action_list_elemental()
         this, "Lightning Bolt",
         "if=buff.stormkeeper.up&spell_targets.chain_lightning<2&(buff.master_of_the_elements.up)" );
     single_target->add_action( this, "Earthquake",
-                               "if=buff.echoes_of_great_sundering.up&(!talent.master_of_the_elements.enabled|buff."
-                               "master_of_the_elements.up)" );
-    single_target->add_action(
-        this, "Earthquake",
-        "if=spell_targets.chain_lightning>1&!dot.flame_shock.refreshable&!runeforge.echoes_of_great_sundering.equipped&(!talent."
-        "master_of_the_elements.enabled|buff.master_of_the_elements.up|cooldown.lava_burst.remains>0&maelstrom>=92)" );
+        "if=buff.echoes_of_great_sundering.up&(talent.master_of_the_elements.enabled&(buff.master_of_the_elements.up|cooldown.lava_burst.remains>0&"
+                              "maelstrom>=92|spell_targets.chain_lightning<2&buff.stormkeeper.up&cooldown.lava_burst.remains<=gcd)|!talent.master_of_the_elements.enabled"
+                              "|cooldown.elemental_blast.remains<=1.1*gcd*2)"  );
+ 
+    
     single_target->add_action(
         this, "Earth Shock",
         "if=talent.master_of_the_elements.enabled&(buff.master_of_the_elements.up|cooldown.lava_burst.remains>0&"
